@@ -1,0 +1,10 @@
+.form__input{
+    background: transparent;
+    color: #ffffff;
+    border-bottom: 2px solid #CCCCCC;
+    width: 358px;
+}
+
+.form__input::placeholder{
+    color: #ffffff;
+}

@@ -1,0 +1,5 @@
+.popup__form {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 430px;
+}

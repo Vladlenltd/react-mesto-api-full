@@ -1,0 +1,9 @@
+.element__item {
+    border-radius: 10px 10px 0px 0px;
+    width: 282px;
+    height: 282px;
+    cursor: pointer;
+    background: #c4c4c4;
+    display: block;
+    object-fit: cover;
+}

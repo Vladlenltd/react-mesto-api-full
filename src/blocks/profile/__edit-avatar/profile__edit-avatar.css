@@ -1,0 +1,22 @@
+.profile__edit-avatar {
+    background-color: inherit;
+    /* background-image: url(../../../image/edit.svg); */
+    /* background-position: 50%; */
+    background-repeat: no-repeat;
+    width: 120px;
+    height: 120px;
+    padding: 0;
+    cursor: pointer;
+    position: absolute;
+    border-radius: 50%;
+    border: none;
+    background-size: 26px;
+    transition: .3s ease-in-out;
+    background-position: center;
+}
+
+.profile__edit-avatar:hover {
+    cursor: pointer;
+    background-image: url(../../../image/edit.svg);
+    background-color: rgba(0, 0, 0, .8);
+}

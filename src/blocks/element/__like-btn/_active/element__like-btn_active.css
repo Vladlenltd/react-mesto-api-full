@@ -1,0 +1,10 @@
+.element__like-btn_active {
+    display: inline-flex;
+    width: 22px;
+    height: 19px;
+    border: none;
+    background-color: inherit;
+    background-image: url(../../../../image/Union.svg);
+    transition: opasity 0.4s linear;
+    cursor: pointer;
+}

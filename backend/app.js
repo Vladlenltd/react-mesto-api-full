@@ -7,9 +7,6 @@ const cardsRouter = require('./routes/cards');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/notFoundError');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
-
-require('dotenv').config();
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -24,9 +21,6 @@ app.listen(PORT, () => {
 });
 
 app.use(express.json());
-
-app.use(requestLogger); // подключаем логгер запросов
-
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -45,8 +39,6 @@ app.post('/signup', celebrate({
 }), createUser);
 app.use('/', auth, cardsRouter);
 app.use('/', auth, usersRouter);
-
-app.use(errorLogger); // подключаем логгер ошибок
 
 app.use((req, res, next) => {
   next(new NotFoundError('Страницы не существует'));

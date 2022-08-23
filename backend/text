@@ -1,0 +1,6 @@
+{
+  "name": "test",
+  // "about": "1",
+  "about": "я не понимаю почему проходит ответ 200 когда в about больше 30 символов",
+  "avatar": "https://pictures.s3.yandex.net/resources/Screen_Shot_2019-09-25_at_18.26.07_1643789068.png"
+}

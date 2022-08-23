@@ -1,7 +1,0 @@
-.element__wrapper {
-    display: grid;
-    grid-template-columns: repeat(2, 220px 20px);
-    grid-template-rows: repeat(1, 25px);
-    align-items: center;
-    margin: 25px 21px 31px 15px;
-}

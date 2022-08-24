@@ -161,7 +161,7 @@ function App() {
       .registration(password, email)
       .then(() => {
         setIsLoginSuccess(true);
-        navigate("/sign-in");
+        navigate("/signin");
       })
       .catch((err) => {
         setIsLoginSuccess(false);
@@ -192,7 +192,7 @@ function App() {
   function onSignOut() {
     localStorage.removeItem("jwt");
     setIsLogIn(false);
-    navigate("/sign-in");
+    navigate("/signin");
   }
 
   function closeAllPopups() {
@@ -214,10 +214,10 @@ function App() {
           />
           <Routes>
             <Route
-              path="/sign-up"
+              path="/signup"
               element={<Register onRegistration={handleRegistration} />}
             />
-            <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
+            <Route path="/signin" element={<Login onLogin={handleLogin} />} />
             <Route
               path="/"
               element={

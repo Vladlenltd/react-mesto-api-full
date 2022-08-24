@@ -15,13 +15,13 @@ function Header({ isLogIn, userEmail, onSignOut }) {
             </p>
           </>
         )}
-        {!isLogIn && location.pathname === "/sign-in" && (
-          <Link to="/sign-up" className="registration__link">
+        {!isLogIn && location.pathname === "/signin" && (
+          <Link to="/signup" className="registration__link">
             Регистрация
           </Link>
         )}
-        {!isLogIn && location.pathname === "/sign-up" && (
-          <Link to="/sign-in" className="registration__link">
+        {!isLogIn && location.pathname === "/signup" && (
+          <Link to="/signin" className="registration__link">
             Вoйти
           </Link>
         )}

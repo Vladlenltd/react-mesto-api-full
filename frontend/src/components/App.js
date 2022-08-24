@@ -154,7 +154,7 @@ function App() {
     if (token) {
       handleCheckToken();
     }
-  }/*, []*/);
+  }, []);
 
   function handleRegistration(email, password) {
     apiAuth

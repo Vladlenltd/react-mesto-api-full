@@ -25,14 +25,15 @@ module.exports.createUser = (req, res, next) => {
     })
     .catch((error) => {
       if (error.name === 'ValidationError') {
-        throw new BadRequest('Не верные данные');
+        next(new BadRequest('Не верные данные'));
       } else if (error.code === '11000') {
-        throw new DuplicateKeyError('Пользователь с указнным email существует');
+        next(new DuplicateKeyError('Пользователь с указнным email существует'));
+      } else {
+        next(error);
       }
-      next(error);
-    })
-    .catch(next);
+    });
 };
+
 module.exports.getUserById = (req, res, next) => {
   const userId = req.params.id;
   User.findById(userId)
@@ -45,25 +46,21 @@ module.exports.getUserById = (req, res, next) => {
     })
     .catch((error) => {
       if (error.name === 'CastError') {
-        throw new BadRequest('Неверно указан id');
+        next(new BadRequest('Неверно указан id'));
+      } else {
+        next(error);
       }
-      next(error);
-    })
-    .catch(next);
+    });
 };
+
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((data) => {
       res.status(errorStatus.SUCCESSFUL_REQUEST).send(data);
     })
-    .catch((error) => {
-      if (error.name === 'CastError') {
-        throw new NotFoundError('Пользователь не найден');
-      }
-      next(error);
-    })
     .catch(next);
 };
+
 module.exports.updateUserInfo = (req, res, next) => {
   const { name, about } = req.body;
   const userId = req.user._id;
@@ -73,11 +70,13 @@ module.exports.updateUserInfo = (req, res, next) => {
     })
     .catch((error) => {
       if (error.name === 'ValidationError') {
-        throw new BadRequest('Некоректные данные');
-      } next(error);
-    })
-    .catch(next);
+        next(new BadRequest('Некоректные данные'));
+      } else {
+        next(error);
+      }
+    });
 };
+
 module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
   const userId = req.user._id;
@@ -87,20 +86,23 @@ module.exports.updateUserAvatar = (req, res, next) => {
     })
     .catch((error) => {
       if (error.name === 'ValidationError') {
-        throw new BadRequest('Некорректные данные');
-      } next(error);
-    })
-    .catch(next);
+        next(new BadRequest('Некорректные данные'));
+      } else {
+        next(error);
+      }
+    });
 };
+
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, 'very-very-secret-code', { expiresIn: 3600 });
-      res.status(errorStatus.SUCCESSFUL_REQUEST).res.send({ token });
+      res.status(errorStatus.SUCCESSFUL_REQUEST).send({ token });
     })
     .catch(next);
 };
+
 module.exports.getCurrentUserInfo = (req, res, next) => {
   const userId = req.user._id;
   return User.findById(userId)

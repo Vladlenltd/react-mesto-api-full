@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { celebrate, Joi } = require('celebrate');
+const { celebrate, Joi, errors } = require('celebrate');
 const cors = require('cors');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
@@ -9,6 +9,7 @@ const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/notFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { errorHandler } = require('./utils/errorHandler');
 
 require('dotenv').config();
 
@@ -37,10 +38,10 @@ app.get('/crash-test', () => {
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8)
-      .max(30),
+    password: Joi.string().required(),
   }),
 }), login);
+
 app.post('/signup', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -55,6 +56,10 @@ app.use('/', auth, usersRouter);
 
 app.use(errorLogger); // подключаем логгер ошибок
 
-app.use((req, res, next) => {
+app.use(errors());
+
+app.use(errorHandler);
+
+app.use('/*', auth, (req, res, next) => {
   next(new NotFoundError('Страницы не существует'));
 });

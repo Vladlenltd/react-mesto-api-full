@@ -15,20 +15,25 @@ cardsRouter.post('/cards', celebrate({
       .regex(/^(https?:\/\/)?([\da-z.-]+).([a-z.]{2,6})([/\w.-]*)*\/?$/),
   }),
 }), createCard);
+
 cardsRouter.get('/cards', getCard);
+
 cardsRouter.delete('/cards/:id', celebrate({
-  body: Joi.object().keys({
+  params: Joi.object().keys({
     id: Joi.string().required().hex().length(24),
   }),
 }), deleteCard);
+
 cardsRouter.put('/cards/:id/likes', celebrate({
-  body: Joi.object().keys({
+  params: Joi.object().keys({
     id: Joi.string().required().hex().length(24),
   }),
 }), likeCard);
+
 cardsRouter.delete('/cards/:id/likes', celebrate({
-  body: Joi.object().keys({
+  params: Joi.object().keys({
     id: Joi.string().required().hex().length(24),
   }),
 }), disLikeCard);
+
 module.exports = cardsRouter;

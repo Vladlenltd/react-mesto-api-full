@@ -9,7 +9,7 @@ const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/notFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { errorHandler } = require('./utils/errorHandler');
+const { errorHandler } = require('./middlewares/errorHandler');
 
 require('dotenv').config();
 
@@ -29,11 +29,11 @@ app.use(requestLogger); // подключаем логгер запросов
 
 app.use(cors());
 
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
+// app.get('/crash-test', () => {
+//   setTimeout(() => {
+//     throw new Error('Сервер сейчас упадёт');
+//   }, 0);
+// });
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({

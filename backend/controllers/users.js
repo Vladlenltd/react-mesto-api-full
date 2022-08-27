@@ -6,6 +6,8 @@ const BadRequest = require('../errors/badRequest');
 const NotFoundError = require('../errors/notFoundError');
 const DuplicateKeyError = require('../errors/duplicateKeyError');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 module.exports.createUser = (req, res, next) => {
   const {
     email, name, about, avatar, password,
@@ -97,7 +99,7 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'very-very-secret-code', { expiresIn: 3600 });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: 3600 });
       res.status(errorStatus.SUCCESSFUL_REQUEST).send({ token });
     })
     .catch(next);

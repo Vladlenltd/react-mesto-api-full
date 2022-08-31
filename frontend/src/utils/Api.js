@@ -12,11 +12,14 @@ class Api {
         }
     }
 
-    getUserInfo() {
+    getUserInfo(token) {
         return fetch (`${this._baseUrl}/users/me`, {
             debugger: '',
             method: 'GET',
-            headers: this._headers
+            headers: {
+                authorization: "Bearer " + token,
+                "Content-Type": 'application/json'
+            }
         })
         .then(this._checkStatus)
     }
@@ -107,9 +110,16 @@ class Api {
 
 export const api = new Api({
     baseUrl: 'https://api.mesto.vltd.nomoredomains.sbs',
+<<<<<<< HEAD
     // baseUrl: 'http://localhost:3000/',
     headers: {
         // authorization: '6be6d1f2-064d-406f-a1f7-f93c76457b36',
         'Content-Type': 'application/json'
+=======
+    // baseUrl: 'http://localhost:3000',
+    headers: {
+        'Content-Type': 'application/json',
+        authorization: "Bearer " + localStorage.getItem("jwt")
+>>>>>>> develop
     }
 })

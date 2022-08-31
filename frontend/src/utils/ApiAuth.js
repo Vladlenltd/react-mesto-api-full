@@ -32,11 +32,12 @@ export const authorization = (password, email) => {
 };
 
 export const checkTokenValidity = (token) => {
-  return fetch(`${BASE_URL}/users/me`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    return fetch(`${BASE_URL}/users/me`, {
+        method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: 'Bearer ' + localStorage.getItem("jwt"),
+      },
+
   }).then(checkServerStatus);
 };

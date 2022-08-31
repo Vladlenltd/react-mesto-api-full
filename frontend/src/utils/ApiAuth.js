@@ -1,5 +1,5 @@
-// export const BASE_URL = "https://api.mesto.vltd.nomoredomains.sbs";
-export const BASE_URL = "https://localhost:3000";
+export const BASE_URL = "https://api.mesto.vltd.nomoredomains.sbs";
+// export const BASE_URL = "https://localhost:3000";
 
 const checkServerStatus = (res) => {
   return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
@@ -32,11 +32,12 @@ export const authorization = (password, email) => {
 };
 
 export const checkTokenValidity = (token) => {
-  return fetch(`${BASE_URL}/users/me`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    return fetch(`${BASE_URL}/users/me`, {
+        method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: 'Bearer ' + localStorage.getItem("jwt"),
+      },
+
   }).then(checkServerStatus);
 };

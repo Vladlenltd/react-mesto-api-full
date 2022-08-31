@@ -35,26 +35,24 @@ function App() {
   const [userEmail, setUserEmail] = React.useState("");
 
   React.useEffect(() => {
-    api
-      .getUserInfo()
-      .then((data) => {
-        setCurrentUser(data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  }, []);
+    if (isLogIn) {
+            const token = localStorage.getItem('jwt');
 
-  React.useEffect(() => {
-    api
-      .getInitialCards()
-      .then((items) => {
-        setCards(items);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  }, []);
+            api.getUserInfo(token).then((user) => {
+                setCurrentUser(user.data);
+            })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+            api.getInitialCards(token).then((cardInfo) => {
+                setCards(cardInfo.data.reverse());
+            })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }, [isLogIn])
 
   function handleUpdateUser(data) {
     api
@@ -132,23 +130,21 @@ function App() {
   function handleAddPlaceClick() {
     setIsAddPlacePopup(true);
   }
-  const handleCheckToken = () => {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      apiAuth
-        .checkTokenValidity(token)
-        .then((res) => {
-          if (res) {
-            setUserEmail(res.data.email);
-            setIsLogIn(true);
-            navigate("/");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+
+      const handleCheckToken = () => {
+        const token = localStorage.getItem("jwt");
+        if (token) {
+            apiAuth.checkTokenValidity(token)
+                .then((res) => {
+                    if (res.data) {
+                        setUserEmail(res.data.email);
+                        setIsLogIn(true);
+                    }
+                })
+                .catch(err => console.log(err));
+        }
     }
-  };
+
   React.useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
@@ -181,6 +177,7 @@ function App() {
         }
         setUserEmail(email);
         setIsLogIn(true);
+        console.log(isLogIn)
         navigate("/");
         handleCheckToken();
       })

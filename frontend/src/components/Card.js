@@ -15,11 +15,14 @@ function Card({ card, name, link, onCardClick, onCardLike, onCardDelete }) {
   }
 
   const currentUser = React.useContext(CurrentUserContext);
-  const isOwn = card.owner._id === currentUser._id;
+  // const isOwn = card.owner._id === currentUser._id;
+  const isOwn = card.owner === currentUser._id;
+  console.log(isOwn);
   const cardDeleteButtonClassName = `element__delete-btn ${
     isOwn ? "" : "element__delete-btn_disable"
   }`;
   const isLiked = card.likes.some((i) => i._id === currentUser._id);
+  console.log(isLiked)
   const cardLikeButtonClassName = `element__like-btn ${
     isLiked ? "element__like-btn_active" : ""
   }`;

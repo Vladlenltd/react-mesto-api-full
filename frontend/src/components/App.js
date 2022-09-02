@@ -9,11 +9,10 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import * as apiAuth from "../utils/ApiAuth";
 import Login from "./Login";
 import Register from "./Register";
 import InfoTooltip from "./InfoTooltip";
-// import { auth } from '../utils/Auth';
-import * as apiAuth from "../utils/ApiAuth";
 import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
@@ -44,7 +43,6 @@ function App() {
                 .catch((err) => {
                     console.log(err);
                 });
-
             api.getInitialCards(token).then((cardInfo) => {
                 setCards(cardInfo.data.reverse());
             })
@@ -52,7 +50,24 @@ function App() {
                     console.log(err);
                 });
         }
-    }, [isLogIn])
+  }, [isLogIn])
+  
+    function handleLogin(email, password) {
+    apiAuth
+      .authorization(password, email)
+      .then((res) => {
+        if (res.token) {
+          localStorage.setItem("jwt", res.token);
+        }
+        setUserEmail(email);
+        setIsLogIn(true);
+        navigate("/");
+        handleCheckToken();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   function handleUpdateUser(data) {
     api
@@ -79,7 +94,7 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i === currentUser._id);
     api
       .changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
@@ -165,24 +180,6 @@ function App() {
       })
       .finally(() => {
         setInfoTooltipPopupState(true);
-      });
-  }
-
-  function handleLogin(email, password) {
-    apiAuth
-      .authorization(password, email)
-      .then((res) => {
-        if (res.token) {
-          localStorage.setItem("jwt", res.token);
-        }
-        setUserEmail(email);
-        setIsLogIn(true);
-        console.log(isLogIn)
-        navigate("/");
-        handleCheckToken();
-      })
-      .catch((err) => {
-        console.log(err);
       });
   }
 

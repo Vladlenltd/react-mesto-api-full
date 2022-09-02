@@ -28,7 +28,7 @@ module.exports.createUser = (req, res, next) => {
     .catch((error) => {
       if (error.name === 'ValidationError') {
         next(new BadRequest('Не верные данные'));
-      } else if (error.code === '11000') {
+      } else if (error.code === 11000) {
         next(new DuplicateKeyError('Пользователь с указнным email существует'));
       } else {
         next(error);
@@ -109,7 +109,7 @@ module.exports.getCurrentUserInfo = (req, res, next) => {
   const userId = req.user._id;
   return User.findById(userId)
     .then((user) => {
-      res.status(errorStatus.SUCCESSFUL_REQUEST).res.send(user);
+      res.status(errorStatus.SUCCESSFUL_REQUEST).send(user);
     })
     .catch(next);
 };

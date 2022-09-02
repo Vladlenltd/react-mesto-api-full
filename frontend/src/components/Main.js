@@ -17,7 +17,7 @@ function Main({
     <main className="main">
       <section className="profile">
         <img
-          src={currentUser.avatar}
+          src={currentUser?.avatar}
           alt="Аватар пользователя"
           className="profile__foto"
         />
@@ -28,10 +28,10 @@ function Main({
         />
         <article className="profile__info">
           <div className="profile__wrapper">
-            <h1 className="profile__title">{currentUser.name}</h1>
+            <h1 className="profile__title">{currentUser?.name}</h1>
             <button className="profile__edit-btn" onClick={onEditProfile} />
           </div>
-          <p className="profile__subtitle">{currentUser.about}</p>
+          <p className="profile__subtitle">{currentUser?.about}</p>
         </article>
         <button className="profile__add-btn" onClick={onAddPlace} />
       </section>

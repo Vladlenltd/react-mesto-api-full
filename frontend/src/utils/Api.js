@@ -24,10 +24,14 @@ class Api {
         .then(this._checkStatus)
     }
 
-    getInitialCards() {
+    getInitialCards(token) {
         return fetch(`${this._baseUrl}/cards`, {
             method: 'GET',
             headers: this._headers,
+            // headers: {
+            //     authorization: "Bearer " + token,
+            //     "Content-Type": 'application/json'
+            // }
         })
         .then((res => {
             return this._checkStatus(res)
@@ -82,35 +86,42 @@ class Api {
         })
         .then(this._checkStatus)
     }
-
-    changeLikeCardStatus(id, isLiked) {
-        if(!isLiked) {
-            return this.delLike(id);
-        }else {
-            return this.addlike(id);
-        }
-    }
     
-    addlike(id) {
+    changeLikeCardStatus(id, isLiked) {
         return fetch(`${this._baseUrl}/cards/${id}/likes`, {
-            method: 'PUT',
+            method: isLiked ? 'PUT' : 'DELETE',
             headers: this._headers
         })
         .then(this._checkStatus)
     }
+    // changeLikeCardStatus(id, isLiked) {
+    //     if(!isLiked) {
+    //         return this.delLike(id);
+    //     }else {
+    //         return this.addlike(id);
+    //     }
+    // }
+    
+    // addlike(id) {
+    //     return fetch(`${this._baseUrl}/cards/${id}/likes`, {
+    //         method: 'PUT',
+    //         headers: this._headers
+    //     })
+    //     .then(this._checkStatus)
+    // }
 
-    delLike(id) {
-        return fetch(`${this._baseUrl}/cards/${id}/likes`, {
-            method: 'DELETE',
-            headers: this._headers
-        })
-        .then(this._checkStatus)
-    }
+    // delLike(id) {
+    //     return fetch(`${this._baseUrl}/cards/${id}/likes`, {
+    //         method: 'DELETE',
+    //         headers: this._headers
+    //     })
+    //     .then(this._checkStatus)
+    // }
 }
 
 export const api = new Api({
-    baseUrl: 'https://api.mesto.vltd.nomoredomains.sbs',
-    // baseUrl: 'http://localhost:3000/',
+    // baseUrl: 'https://api.mesto.vltd.nomoredomains.sbs',
+    baseUrl: 'http://localhost:3000',
     headers: {
         'Content-Type': 'application/json',
         authorization: "Bearer " + localStorage.getItem("jwt")

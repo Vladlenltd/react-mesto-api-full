@@ -72,11 +72,11 @@ module.exports.likeCard = (req, res, next) => {
     })
     .catch((error) => {
       if (error.name === 'CastError') {
-        throw new BadRequest('Карточка не найдена');
-      } else {
-        next(error);
+        next(new BadRequest('Карточка не найдена'));
       }
-    });
+      next(error);
+    })
+    .catch(next);
 };
 module.exports.disLikeCard = (req, res, next) => {
   const cardId = req.params.id;
@@ -97,5 +97,6 @@ module.exports.disLikeCard = (req, res, next) => {
       } else {
         next(error);
       }
-    });
+    })
+    .catch(next);
 };

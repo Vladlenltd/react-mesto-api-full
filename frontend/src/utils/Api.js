@@ -27,11 +27,10 @@ class Api {
     getInitialCards(token) {
         return fetch(`${this._baseUrl}/cards`, {
             method: 'GET',
-            headers: this._headers,
-            // headers: {
-            //     authorization: "Bearer " + token,
-            //     "Content-Type": 'application/json'
-            // }
+            headers: {
+                authorization: "Bearer " + token,
+                "Content-Type": 'application/json'
+            }
         })
         .then((res => {
             return this._checkStatus(res)
@@ -94,29 +93,6 @@ class Api {
         })
         .then(this._checkStatus)
     }
-    // changeLikeCardStatus(id, isLiked) {
-    //     if(!isLiked) {
-    //         return this.delLike(id);
-    //     }else {
-    //         return this.addlike(id);
-    //     }
-    // }
-    
-    // addlike(id) {
-    //     return fetch(`${this._baseUrl}/cards/${id}/likes`, {
-    //         method: 'PUT',
-    //         headers: this._headers
-    //     })
-    //     .then(this._checkStatus)
-    // }
-
-    // delLike(id) {
-    //     return fetch(`${this._baseUrl}/cards/${id}/likes`, {
-    //         method: 'DELETE',
-    //         headers: this._headers
-    //     })
-    //     .then(this._checkStatus)
-    // }
 }
 
 export const api = new Api({

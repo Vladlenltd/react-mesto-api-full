@@ -55,14 +55,14 @@ function App() {
     function handleLogin(email, password) {
     apiAuth
       .authorization(password, email)
-      .then((res) => {
-        if (res.token) {
-          localStorage.setItem("jwt", res.token);
+      .then((data) => {
+        if (data) {
+          localStorage.setItem("jwt", data.token);
+          setUserEmail(email);
+          setIsLogIn(true);
+          navigate("/");
+          handleCheckToken();
         }
-        setUserEmail(email);
-        setIsLogIn(true);
-        navigate("/");
-        handleCheckToken();
       })
       .catch((err) => {
         console.log(err);

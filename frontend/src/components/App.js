@@ -38,13 +38,13 @@ function App() {
             const token = localStorage.getItem('jwt');
 
             api.getUserInfo(token).then((user) => {
-                setCurrentUser(user.data);
+                setCurrentUser(user);
             })
                 .catch((err) => {
                     console.log(err);
                 });
             api.getInitialCards(token).then((cardInfo) => {
-                setCards(cardInfo.data.reverse());
+                setCards(cardInfo.reverse());
             })
                 .catch((err) => {
                     console.log(err);

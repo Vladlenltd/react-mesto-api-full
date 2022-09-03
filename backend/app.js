@@ -1,12 +1,10 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
-const { celebrate, Joi, errors } = require('celebrate');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const { errors } = require('celebrate');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
-// const errorStatus = require('./utils/errorStatus');
-const { createUser, login } = require('./controllers/users');
 const NotFoundError = require('./errors/notFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./middlewares/errorHandler');
@@ -34,25 +32,8 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), login);
-
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().regex(/^(https?:\/\/)?([\da-z.-]+).([a-z.]{2,6})([/\w.-]*)*\/?$/),
-  }),
-}), createUser);
-
-app.use('/', auth, cardsRouter);
-app.use('/', auth, usersRouter);
+app.use(cardsRouter);
+app.use(usersRouter);
 
 app.use('/*', auth, (req, res, next) => {
   next(new NotFoundError('Страницы не существует'));

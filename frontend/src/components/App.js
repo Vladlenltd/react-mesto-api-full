@@ -61,7 +61,7 @@ function App() {
           setUserEmail(email);
           setIsLogIn(true);
           navigate("/");
-          handleCheckToken();
+          // handleCheckToken();
         }
       })
       .catch((err) => {

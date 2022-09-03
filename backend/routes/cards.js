@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-escape */
 const cardsRouter = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+const auth = require('../middlewares/auth');
 const {
   createCard,
   getCard,
@@ -15,7 +16,7 @@ cardsRouter.post('/cards', celebrate({
     link: Joi.string().required()
       .regex(/^http(s)?:\/\/(w{3}\.)?([da-z\-]+\.)+([\w#!:.?+=&%\-])?/),
   }),
-}), createCard);
+}), auth, createCard);
 
 cardsRouter.get('/cards', getCard);
 
@@ -23,18 +24,18 @@ cardsRouter.delete('/cards/:id', celebrate({
   params: Joi.object().keys({
     id: Joi.string().required().hex().length(24),
   }),
-}), deleteCard);
+}), auth, deleteCard);
 
 cardsRouter.put('/cards/:id/likes', celebrate({
   params: Joi.object().keys({
     id: Joi.string().required().hex().length(24),
   }),
-}), likeCard);
+}), auth, likeCard);
 
 cardsRouter.delete('/cards/:id/likes', celebrate({
   params: Joi.object().keys({
     id: Joi.string().required().hex().length(24),
   }),
-}), disLikeCard);
+}), auth, disLikeCard);
 
 module.exports = cardsRouter;

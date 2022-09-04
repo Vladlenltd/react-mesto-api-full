@@ -51,6 +51,18 @@ function App() {
                 });
         }
   }, [isLogIn])
+
+    React.useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      apiAuth.checkTokenValidity(token)
+        .then((res) => {
+          if (res) {
+            setIsLogIn(true);
+            navigate("/")}
+        })
+    }
+  }, [navigate]);
   
     function handleLogin(email, password) {
     apiAuth
@@ -61,7 +73,7 @@ function App() {
           setUserEmail(email);
           setIsLogIn(true);
           navigate("/");
-          // handleCheckToken();
+          handleCheckToken();
         }
       })
       .catch((err) => {
@@ -163,12 +175,7 @@ function App() {
         }
     }
 
-  React.useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      handleCheckToken();
-    }
-  }, []);
+
 
   function handleRegistration(email, password) {
     apiAuth

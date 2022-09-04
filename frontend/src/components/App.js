@@ -65,6 +65,9 @@ function App() {
         }
       })
       .catch((err) => {
+        setIsLogIn(false);
+        setIsLoginSuccess(false)
+        setInfoTooltipPopupState(true);
         console.log(err);
       });
   }

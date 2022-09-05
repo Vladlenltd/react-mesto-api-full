@@ -54,6 +54,7 @@ function App() {
 
   React.useEffect(() => {
     handleCheckToken();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
     function handleLogin(email, password) {
@@ -160,7 +161,6 @@ function handleCheckToken() {
     if (token) {
       apiAuth.checkTokenValidity()
       .then((res) => {
-        console.log(res);
         if (res) {
           setUserEmail(res.email);
           setIsLogIn(true);

@@ -31,7 +31,7 @@ export const authorization = (password, email) => {
   }).then(checkServerStatus);
 };
 
-export const checkTokenValidity = (token) => {
+export const checkTokenValidity = () => {
     return fetch(`${BASE_URL}/users/me`, {
         method: "GET",
       headers: {

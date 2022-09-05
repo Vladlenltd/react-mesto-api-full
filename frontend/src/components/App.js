@@ -4,12 +4,12 @@ import Main from "./Main";
 import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import { api } from "../utils/Api";
+import * as apiAuth from "../utils/ApiAuth";
 import { CurrentUserContext } from "../context/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import * as apiAuth from "../utils/ApiAuth";
 import Login from "./Login";
 import Register from "./Register";
 import InfoTooltip from "./InfoTooltip";
@@ -32,51 +32,30 @@ function App() {
   const [isLoginSuccess, setIsLoginSuccess] = React.useState(false);
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = React.useState("");
-  const [token, setToken] = React.useState()
+  // const [token, setToken] = React.useState();
 
   React.useEffect(() => {
     if (isLogIn) {
-            // const token = localStorage.getItem('jwt');
-            api.getUserInfo(token).then((user) => {
-              setCurrentUser(user);
+      const token = localStorage.getItem('jwt');
+      api.getUserInfo(token).then((user) => {
+        setCurrentUser(user);
+        setIsLogIn(true);
             })
                 .catch((err) => {
                     console.log(err);
                 });
-            api.getInitialCards(token).then((cardInfo) => {
+            api.getInitialCards().then((cardInfo) => {
                 setCards(cardInfo.reverse());
             })
                 .catch((err) => {
                     console.log(err);
                 });
         }
-  }, [isLogIn, token])
+  }, [isLogIn])
 
   React.useEffect(() => {
-    // handleCheckToken();
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      apiAuth.checkTokenValidity(token)
-        .then((res) => {
-          if (res) {
-            setIsLogIn(true);
-            // setCurrentUser();
-            navigate("/")}
-        // }
-    })
-      // const jwt = localStorage.getItem("jwt");
-      //   if (jwt) {
-      //       apiAuth.checkTokenValidity(jwt)
-      //           .then((user) => {
-      //               if (user) {
-      //                 setIsLogIn(true);
-      //                 setUserEmail(user.data.email);
-      //                 navigate("/")
-                    // }
-                // })
-                .catch(err => console.log(err));
-        }
-  }, [navigate]);
+    handleCheckToken();
+  }, []);
   
     function handleLogin(email, password) {
     apiAuth
@@ -84,8 +63,8 @@ function App() {
       .then((data) => {
         if (data) {
           localStorage.setItem("jwt", data.token);
+          // setToken(data.token)
           // handleCheckToken();
-          setToken(data.token)
           setUserEmail(email);
           setIsLogIn(true);
           navigate("/");
@@ -100,6 +79,7 @@ function App() {
   }
 
   function handleUpdateUser(data) {
+    const token = localStorage.getItem('jwt');
     api
       .setUserInfo(data, token)
       .then((data) => {
@@ -112,6 +92,7 @@ function App() {
   }
 
   function handleUpdateAvatar(link) {
+    const token = localStorage.getItem('jwt');
     api
       .newUserAvatar(link, token)
       .then((data) => {
@@ -124,6 +105,7 @@ function App() {
   }
 
   function handleCardLike(card) {
+    const token = localStorage.getItem('jwt');
     const isLiked = card.likes.some((i) => i === currentUser._id);
     api
       .changeLikeCardStatus(card._id, !isLiked, token)
@@ -138,6 +120,7 @@ function App() {
   }
 
   function handleCardDelete(card) {
+    const token = localStorage.getItem('jwt');
     api
       .delCard(card._id, token)
       .then(() => {
@@ -149,6 +132,7 @@ function App() {
   }
 
   function handleAddPlace(data) {
+    const token = localStorage.getItem('jwt');
     api
       .addNewCard(data, token)
       .then((newCard) => {
@@ -175,23 +159,21 @@ function App() {
   function handleAddPlaceClick() {
     setIsAddPlacePopup(true);
   }
-
-    //   const handleCheckToken = () => {
-    //     const jwt = localStorage.getItem("jwt");
-    //     if (jwt) {
-    //         apiAuth.checkTokenValidity(jwt)
-    //             .then((user) => {
-    //                 if (user) {
-    //                   setIsLogIn(true);
-    //                   setUserEmail(user.data.email);
-    //                   navigate("/")
-    //                 }
-    //             })
-    //             .catch(err => console.log(err));
-    //     }
-    // }
-
-
+function handleCheckToken() {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      apiAuth.checkTokenValidity()
+      .then((res) => {
+        console.log(res);
+        if (res) {
+          setUserEmail(res.email);
+          setIsLogIn(true);
+          navigate('/');
+        }       
+      })
+      .catch((err) => console.log(err));
+    }
+  };
 
   function handleRegistration(email, password) {
     apiAuth
@@ -211,7 +193,7 @@ function App() {
 
   function onSignOut() {
     localStorage.removeItem("jwt");
-    setToken('')
+    // setToken('')
     setIsLogIn(false);
     navigate("/signin");
   }

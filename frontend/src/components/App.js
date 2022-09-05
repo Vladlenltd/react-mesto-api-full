@@ -32,13 +32,13 @@ function App() {
   const [isLoginSuccess, setIsLoginSuccess] = React.useState(false);
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = React.useState("");
+  const [token, setToken] = React.useState()
 
   React.useEffect(() => {
     if (isLogIn) {
-            const token = localStorage.getItem('jwt');
-
+            // const token = localStorage.getItem('jwt');
             api.getUserInfo(token).then((user) => {
-                setCurrentUser(user);
+              setCurrentUser(user);
             })
                 .catch((err) => {
                     console.log(err);
@@ -50,19 +50,33 @@ function App() {
                     console.log(err);
                 });
         }
-  }, [isLogIn])
+  }, [isLogIn, token])
 
-    React.useEffect(() => {
+  React.useEffect(() => {
+    // handleCheckToken();
     const token = localStorage.getItem("jwt");
     if (token) {
       apiAuth.checkTokenValidity(token)
         .then((res) => {
           if (res) {
             setIsLogIn(true);
+            // setCurrentUser();
             navigate("/")}
-        })
-    }
-  }, [navigate]);
+        // }
+    })
+      // const jwt = localStorage.getItem("jwt");
+      //   if (jwt) {
+      //       apiAuth.checkTokenValidity(jwt)
+      //           .then((user) => {
+      //               if (user) {
+      //                 setIsLogIn(true);
+      //                 setUserEmail(user.data.email);
+      //                 navigate("/")
+                    // }
+                // })
+                .catch(err => console.log(err));
+        }
+  }, []);
   
     function handleLogin(email, password) {
     apiAuth
@@ -70,10 +84,11 @@ function App() {
       .then((data) => {
         if (data) {
           localStorage.setItem("jwt", data.token);
+          // handleCheckToken();
+          setToken(data.token)
           setUserEmail(email);
           setIsLogIn(true);
           navigate("/");
-          handleCheckToken();
         }
       })
       .catch((err) => {
@@ -86,7 +101,7 @@ function App() {
 
   function handleUpdateUser(data) {
     api
-      .setUserInfo(data)
+      .setUserInfo(data, token)
       .then((data) => {
         setCurrentUser(data);
         closeAllPopups();
@@ -98,7 +113,7 @@ function App() {
 
   function handleUpdateAvatar(link) {
     api
-      .newUserAvatar(link)
+      .newUserAvatar(link, token)
       .then((data) => {
         setCurrentUser(data);
         closeAllPopups();
@@ -111,7 +126,7 @@ function App() {
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i === currentUser._id);
     api
-      .changeLikeCardStatus(card._id, !isLiked)
+      .changeLikeCardStatus(card._id, !isLiked, token)
       .then((newCard) => {
         setCards((state) =>
           state.map((c) => (c._id === card._id ? newCard : c))
@@ -124,7 +139,7 @@ function App() {
 
   function handleCardDelete(card) {
     api
-      .delCard(card._id)
+      .delCard(card._id, token)
       .then(() => {
         setCards((cards) => cards.filter((c) => c._id !== card._id));
       })
@@ -135,7 +150,7 @@ function App() {
 
   function handleAddPlace(data) {
     api
-      .addNewCard(data)
+      .addNewCard(data, token)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
@@ -161,19 +176,20 @@ function App() {
     setIsAddPlacePopup(true);
   }
 
-      const handleCheckToken = () => {
-        const token = localStorage.getItem("jwt");
-        if (token) {
-            apiAuth.checkTokenValidity(token)
-                .then((res) => {
-                    if (res.data) {
-                        setUserEmail(res.data.email);
-                        setIsLogIn(true);
-                    }
-                })
-                .catch(err => console.log(err));
-        }
-    }
+    //   const handleCheckToken = () => {
+    //     const jwt = localStorage.getItem("jwt");
+    //     if (jwt) {
+    //         apiAuth.checkTokenValidity(jwt)
+    //             .then((user) => {
+    //                 if (user) {
+    //                   setIsLogIn(true);
+    //                   setUserEmail(user.data.email);
+    //                   navigate("/")
+    //                 }
+    //             })
+    //             .catch(err => console.log(err));
+    //     }
+    // }
 
 
 
@@ -195,6 +211,7 @@ function App() {
 
   function onSignOut() {
     localStorage.removeItem("jwt");
+    setToken('')
     setIsLogIn(false);
     navigate("/signin");
   }

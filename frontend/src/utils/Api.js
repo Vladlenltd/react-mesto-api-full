@@ -41,10 +41,13 @@ class Api {
         return Promise.all([this.getUserInfo(), this.getInitialCards()])
     }
 
-    setUserInfo(data) {
+    setUserInfo(data, token) {
         return fetch(`${this._baseUrl}/users/me`, {
             method: 'PATCH',
-            headers: this._headers,
+            headers: {
+                authorization: "Bearer " + token,
+                "Content-Type": 'application/json'
+            },
             body: JSON.stringify({
                 name: data.name,
                 about: data.about
@@ -53,10 +56,13 @@ class Api {
         .then(this._checkStatus)
     }
 
-    newUserAvatar(link) {
+    newUserAvatar(link, token) {
         return fetch(`${this._baseUrl}/users/me/avatar`, {
             method: 'PATCH',
-            headers: this._headers,
+            headers: {
+                authorization: "Bearer " + token,
+                "Content-Type": 'application/json'
+            },
             body: JSON.stringify({
                 avatar: link
             })
@@ -64,10 +70,13 @@ class Api {
         .then(this._checkStatus)
     }
 
-    addNewCard({ name, link }) {
+    addNewCard({ name, link }, token) {
         return fetch(`${this._baseUrl}/cards`, {
             method: 'POST',
-            headers: this._headers,
+            headers: {
+                authorization: "Bearer " + token,
+                "Content-Type": 'application/json'
+            },
             body: JSON.stringify({
                 name,
                 link
@@ -78,18 +87,24 @@ class Api {
         .then(this._checkStatus)
     }
 
-    delCard(id) {
+    delCard(id, token) {
         return fetch(`${this._baseUrl}/cards/${id}`, {
             method: 'DELETE',
-            headers: this._headers
+            headers: {
+                authorization: "Bearer " + token,
+                "Content-Type": 'application/json'
+            }
         })
         .then(this._checkStatus)
     }
     
-    changeLikeCardStatus(id, isLiked) {
+    changeLikeCardStatus(id, isLiked, token) {
         return fetch(`${this._baseUrl}/cards/${id}/likes`, {
             method: isLiked ? 'PUT' : 'DELETE',
-            headers: this._headers
+            headers: {
+                authorization: "Bearer " + token,
+                "Content-Type": 'application/json'
+            }
         })
         .then(this._checkStatus)
     }

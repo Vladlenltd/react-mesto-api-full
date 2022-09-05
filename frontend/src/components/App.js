@@ -32,7 +32,6 @@ function App() {
   const [isLoginSuccess, setIsLoginSuccess] = React.useState(false);
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = React.useState("");
-  // const [token, setToken] = React.useState();
 
   React.useEffect(() => {
     if (isLogIn) {
@@ -63,10 +62,7 @@ function App() {
       .then((data) => {
         if (data) {
           localStorage.setItem("jwt", data.token);
-          // setToken(data.token)
-          // handleCheckToken();
-          setUserEmail(email);
-          setIsLogIn(true);
+          handleCheckToken();
           navigate("/");
         }
       })
@@ -193,7 +189,6 @@ function handleCheckToken() {
 
   function onSignOut() {
     localStorage.removeItem("jwt");
-    // setToken('')
     setIsLogIn(false);
     navigate("/signin");
   }

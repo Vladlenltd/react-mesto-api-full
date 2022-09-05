@@ -76,7 +76,7 @@ function App() {
                 // })
                 .catch(err => console.log(err));
         }
-  }, []);
+  }, [navigate]);
   
     function handleLogin(email, password) {
     apiAuth

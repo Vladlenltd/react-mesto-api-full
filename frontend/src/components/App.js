@@ -43,7 +43,7 @@ function App() {
                 .catch((err) => {
                     console.log(err);
                 });
-            api.getInitialCards().then((cardInfo) => {
+            api.getInitialCards(token).then((cardInfo) => {
                 setCards(cardInfo.reverse());
             })
                 .catch((err) => {
